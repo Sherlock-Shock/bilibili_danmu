@@ -9,11 +9,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class AbstractDanMu {
    private String fileName;
    private String UrlOrBv;
    private String filePath;
+   // 正则文件名去除非法字符
+   private Pattern pattern = Pattern.compile("[\\s\\\\/:\\*\\?\\\"<>\\|]");
 
     AbstractDanMu(String filePath,String  UrlOrBv){
         this.filePath = filePath;
@@ -70,8 +74,12 @@ public abstract class AbstractDanMu {
         if (!dir.exists()){
             dir.mkdirs();
         }
+
+
+        Matcher matcher = pattern.matcher(fileName);
+        fileName= matcher.replaceAll("");
         File file = new File(filePath+File.separator+ fileName
-                .replaceAll("/","-")+".xml");
+                +".xml");
         try {
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(document);
