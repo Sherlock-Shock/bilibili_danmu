@@ -1,7 +1,5 @@
 package com.lee.bilibili_danmu;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import org.ansj.domain.Result;
 import org.ansj.domain.Term;
 import org.ansj.splitWord.analysis.ToAnalysis;
@@ -9,41 +7,48 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-@SpringBootTest
-class BilibiliDanmuApplicationTests {
-
-    @Test
-    void contextLoads() {
-        Set<String> expectedNature = new HashSet<String>() {{
-            add("n");add("v");add("vd");add("vn");add("vf");
-            add("vx");add("vi");add("vl");add("vg");
-            add("nt");add("nz");add("nw");add("nl");
-            add("ng");add("userDefine");add("wh");
-        }};
-        Map<String,Integer> map = new HashMap<>();
-        Document document = null;
-
-        File filePath = new File("D:\\pachongtupian\\aochangzhang");
-
-        File[] xmlFiles = filePath.listFiles();
-
+/**
+ * @author sherlock
+ * @date 2020/8/25 17:00
+ */
+public class DanMuAnalysis {
+    String filePath="";
+    int count;
+    DanMuAnalysis(String filePath){
+        this.filePath = filePath;
+        this.count=0;
+    }
+    //File files1 = new File("D:\\pachongtupian\\555");
+    File files2 = new File(filePath);
+    Set<String> expectedNature = new HashSet<String>() {{
+        add("n");add("v");add("vd");add("vn");add("vf");
+        add("vx");add("vi");add("vl");add("vg");
+        add("nt");add("nz");add("nw");add("nl");
+        add("ng");add("userDefine");add("wh");
+    }};
+    Map<String,Integer> map = new HashMap<>();
+    Document document = null;
+    public void analysis(){
+        File files = new File(this.filePath);
+        File[] xmlFiles = files.listFiles();
         try{
             for (File f:xmlFiles
             ) {
+                if (!("xml".equals(f.getName().substring(f.getName().lastIndexOf(".")+1)))){
+                    continue;
+                }
                 document = Jsoup.parse(f,"utf-8");
                 Elements elements = document.getElementsByTag("d");
                 StringBuilder str = new StringBuilder();
                 System.out.println("正在解析文件："+f.getName());
                 for (Element e:elements
                 ) {
-                    str.append(e.text());
+                    str.append(e.text().toString());
                 }
                 Result result = ToAnalysis.parse(str.toString());
                 List<Term> terms = result.getTerms();
@@ -61,6 +66,7 @@ class BilibiliDanmuApplicationTests {
                     }
                 }
                 System.out.println("解析完毕："+f.getName());
+                count++;
             }
 
         }catch (IOException e){}
@@ -74,11 +80,11 @@ class BilibiliDanmuApplicationTests {
             }
 
         });
-
+        System.out.println("共解析："+count+"个文件");
         for(Map.Entry<String,Integer> mapping:list){
             System.out.println(mapping.getKey()+":"+mapping.getValue());
         }
-
     }
+
 
 }

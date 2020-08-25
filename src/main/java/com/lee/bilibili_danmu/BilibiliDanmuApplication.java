@@ -13,7 +13,6 @@ import javax.annotation.Resource;
 @SpringBootApplication
 public class BilibiliDanmuApplication {
 
-
     public static void main(String[] args) {
         SpringApplication.run(BilibiliDanmuApplication.class, args);
 
@@ -24,7 +23,9 @@ public class BilibiliDanmuApplication {
 //        danMuFactory.createBvUrlDanMu(filePath,Url).getDanMu();
 //        danMuFactory.createBvDanMu(filePath,"BV1jh411o7dZ").getDanMu();
 //        danMuFactory.createMovieUrlDanMu(filePath,"https://www.bilibili.com/bangumi/play/ss33906").getDanMu();
-        danMuFactory.createPersonAllDanMu(filePath,"https://space.bilibili.com/122879").getDanMu();
+//        danMuFactory.createPersonAllDanMu(filePath,"https://space.bilibili.com/122879").getDanMu();
+        DanMuAnalysis danMuAnalysis = new DanMuAnalysis("D:/pachongtupian/555");
+        danMuAnalysis.analysis();
 
 
     }
